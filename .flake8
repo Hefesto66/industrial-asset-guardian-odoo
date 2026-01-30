@@ -1,0 +1,7 @@
+[flake8]
+max-line-length = 120
+exclude = .git, __pycache__, build, dist, .venv, venv, .github
+ignore = E501, F401, W503
+# E501: Line too long (we use 120, but sometimes it's okay to exceed slightly)
+# F401: Module imported but unused (common in __init__.py)
+# W503: Line break before binary operator (conflicts with black)

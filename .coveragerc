@@ -1,0 +1,11 @@
+[run]
+branch = True
+source = extra-addons/industrial_asset_guardian
+omit =
+    */tests/*
+    */__init__.py
+    */__manifest__.py
+
+[report]
+show_missing = True
+fail_under = 80

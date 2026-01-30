@@ -79,7 +79,7 @@ class IndustrialAsset(models.Model):
 
     def write(self, vals):
         res = super(IndustrialAsset, self).write(vals)
-        
+
         # Post-write check: trigger maintenance if health critical
         for record in self:
             if record.health_score <= 50 and record.status == 'operational':

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="industrial_asset_guardian.PanicGauge">
+        <div class="iag-gauge-container" t-att-class="vibrationClass">
+            <div class="iag-gauge-value" t-att-class="colorClass">
+                <t t-esc="props.record.data[props.name]"/>
+                <span class="small">%</span>
+            </div>
+
+            <div class="progress" style="height: 10px; background-color: #e9ecef;">
+                <div class="progress-bar" 
+                     role="progressbar" 
+                     t-att-style="'width: ' + percentage + '%;'" 
+                     t-att-class="'bg-' + (percentage >= 90 ? 'danger' : (percentage >= 70 ? 'warning' : 'success'))">
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>
