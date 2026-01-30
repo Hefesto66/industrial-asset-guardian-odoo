@@ -1,6 +1,7 @@
 from odoo.tests.common import TransactionCase
 from odoo.exceptions import ValidationError
 
+
 class TestIndustrialAssetLogic(TransactionCase):
 
     def setUp(self):
@@ -11,8 +12,8 @@ class TestIndustrialAssetLogic(TransactionCase):
             'serial_number': 'TEST-001',
             'max_temperature': 100.0,
             'max_vibration': 10.0,
-            'current_temperature': 50.0, # Safe value
-            'current_vibration': 0.0,    # Safe value
+            'current_temperature': 50.0,  # Safe value
+            'current_vibration': 0.0,     # Safe value
             'status': 'operational'
         })
 
@@ -32,8 +33,8 @@ class TestIndustrialAssetLogic(TransactionCase):
     def test_maintenance_trigger(self):
         """ I verify that low health score automatically triggers maintenance status. """
         # I force a write that should trigger the automation
-        self.asset.write({'current_temperature': 130.0}) 
-        
+        self.asset.write({'current_temperature': 130.0})
+
         # The write method override should have detected the new score (20) and changed status
         self.assertEqual(self.asset.status, 'maintenance', "Status should automatically change to 'maintenance'.")
 

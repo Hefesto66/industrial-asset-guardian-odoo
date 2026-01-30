@@ -24,8 +24,8 @@ Author: Hesfesto666
     'version': '1.0',
     'depends': [
         'base',
-        'mail',       # I require this for the Chatter (Messaging history) features.
-        'maintenance', # I integrate with the official Maintenance module for workflow management.
+        'mail',  # I require this for the Chatter (Messaging history) features.
+        'maintenance',  # I integrate with the official Maintenance module for workflow management.
         # 'mrp',      # I may uncomment this in the future to integrate with Manufacturing Orders.
     ],
     'data': [

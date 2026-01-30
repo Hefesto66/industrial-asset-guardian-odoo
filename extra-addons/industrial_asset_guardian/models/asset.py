@@ -38,8 +38,6 @@ class IndustrialAsset(models.Model):
 
     # I compute this field automatically to provide a synthesized health metric (0-100%).
     # I store it in the database (store=True) to allow me to use it in graphs and filters.
-    def _compute_health_score(self):
-        pass  # Placeholder for the method below
 
     health_score = fields.Integer(
         string='Health Score',
