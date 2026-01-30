@@ -19,7 +19,7 @@ Key Features:
 Author: Hesfesto666
     """,
     'author': "Hesfesto666",
-    'website': "https://github.com/Hesfesto666",
+    'website': "https://github.com/Hefesto66/industrial-asset-guardian-odoo?tab=readme-ov-file",
     'category': 'Manufacturing/IoT',
     'version': '1.0',
     'depends': [
