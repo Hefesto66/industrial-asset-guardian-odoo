@@ -7,6 +7,9 @@ services:
       - "8069:8069"
     volumes:
       - ./extra-addons:/mnt/extra-addons
+
+    command: odoo -r odoo -w odoo --addons-path=/mnt/extra-addons,/usr/lib/python3/dist-packages/odoo/addons
+  
   db:
     image: postgres:15
     environment:
