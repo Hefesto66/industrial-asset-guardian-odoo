@@ -2,6 +2,8 @@
 
 ![Odoo Version](https://img.shields.io/badge/Odoo-19.0-purple) ![Tech Stack](https://img.shields.io/badge/Python-OWL_JS-blue) ![Industry](https://img.shields.io/badge/Industry-Mining_%26_Energy-orange)
 
+![Main Dashboard](docs/DASHBOARD_panic_gauge_animation.gif)
+
 ## 📖 Executive Summary
 **Industrial Asset Guardian** bridges the gap between physical machinery (IoT) and Enterprise Resource Planning (ERP).
 
@@ -16,6 +18,8 @@ Instead of relying on manual inspections, IAG uses a proprietary logic engine (`
 * **Dynamic Logic:** Continuously compares live telemetry against technical thresholds (Max Temp/Vibration).
 * **Weighted Penalties:** Applies non-linear penalties based on severity (e.g., >20% overheat results in critical score reduction).
 
+![Asset Registration](docs/Asset%20registration%20dashboard.png)
+
 ### 2. ⚙️ Automated "Zero-Touch" Maintenance
 Eliminates human delay in reporting critical faults.
 * **Trigger:** When `Health Score` drops below **50%**.
@@ -26,6 +30,8 @@ Eliminates human delay in reporting critical faults.
 A custom frontend widget built using the **Odoo Web Library (OWL)** to enhance User Experience.
 * **Visual Feedback:** Replaces static numbers with a reactive progress bar (Green/Yellow/Red).
 * **Haptic/Visual Alert:** If a metric becomes critical (e.g., Temp > 90°C), the component triggers a CSS-based **shaking animation**, instantly drawing the operator's attention to the specific failure.
+
+![Panic Gauge Animation](docs/panic_gauge_animation.gif)
 
 ---
 
@@ -58,6 +64,8 @@ Invoke-RestMethod -Uri "http://localhost:8069/iag/api/update_metrics" `
 -ContentType "application/json" `
 -Body '{"serial_number": "SN-TEST", "temperature": 98.5, "vibration": 1.5}'
 ```
+
+![JSON Injection](docs/JSON%20data%20injection%20simulation.png)
 
 ---
 
