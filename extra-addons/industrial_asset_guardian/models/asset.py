@@ -1,5 +1,6 @@
 from odoo import models, fields, api
 
+
 class IndustrialAsset(models.Model):
     _name = 'iag.asset'
     _description = 'Industrial Asset'
@@ -7,30 +8,30 @@ class IndustrialAsset(models.Model):
 
     name = fields.Char(string='Asset Name', required=True, tracking=True)
     serial_number = fields.Char(string='Serial Number', copy=False)
-    
+
     asset_type = fields.Selection([
         ('motor', 'Electric Motor'),
         ('pump', 'Hydraulic Pump'),
         ('sensor', 'IoT Sensor'),
         ('conveyor', 'Conveyor Belt')
     ], string='Asset Type', required=True, default='motor')
-    
+
     status = fields.Selection([
         ('draft', 'Draft'),
         ('operational', 'Operational'),
         ('maintenance', 'In Maintenance'),
         ('retired', 'Retired')
     ], string='Status', default='draft', tracking=True)
-    
+
     installation_date = fields.Date(string='Installation Date')
     description = fields.Text(string='Technical Specifications')
 
     # --- INTELLIGENCE FIELDS ---
-    
+
     # I define these fields to simulate real-time sensor readings that will eventually come from IoT devices.
     current_temperature = fields.Float(string='Temperature (°C)', default=25.0, tracking=True)
     current_vibration = fields.Float(string='Vibration (mm/s)', default=0.0, tracking=True)
-    
+
     # I enforce these technical limits to detect anomalies. Ideally, I would make them configurable per asset type later.
     max_temperature = fields.Float(string='Max Temp Allowed', default=90.0)
     max_vibration = fields.Float(string='Max Vib Allowed', default=5.0)
@@ -38,12 +39,12 @@ class IndustrialAsset(models.Model):
     # I compute this field automatically to provide a synthesized health metric (0-100%).
     # I store it in the database (store=True) to allow me to use it in graphs and filters.
     def _compute_health_score(self):
-        pass # Placeholder for the method below
+        pass  # Placeholder for the method below
 
     health_score = fields.Integer(
-        string='Health Score', 
-        compute='_compute_health_score', 
-        store=True, 
+        string='Health Score',
+        compute='_compute_health_score',
+        store=True,
         help="Calculated based on temperature and vibration stress."
     )
 
@@ -53,16 +54,16 @@ class IndustrialAsset(models.Model):
         I calculate the health score by applying penalties based on how much the metrics exceed their limits.
         """
         for record in self:
-            score = 100 # I start with a perfect score.
-            
+            score = 100  # I start with a perfect score.
+
             # I apply tiered penalties for Temperature.
             if record.current_temperature > (record.max_temperature * 1.2):
-                score -= 80 # I deduct a massive amount if it exceeds the limit by 20%.
+                score -= 80  # I deduct a massive amount if it exceeds the limit by 20%.
             elif record.current_temperature > record.max_temperature:
-                score -= 50 # I deduct half the health if it simply exceeds the limit.
+                score -= 50  # I deduct half the health if it simply exceeds the limit.
             elif record.current_temperature > (record.max_temperature * 0.8):
-                score -= 10 # I apply a small warning penalty if it gets close (80%) to the limit.
-            
+                score -= 10  # I apply a small warning penalty if it gets close (80%) to the limit.
+
             # I apply similar tiered penalties for Vibration.
             if record.current_vibration > (record.max_vibration * 1.5):
                 score -= 80
@@ -70,7 +71,7 @@ class IndustrialAsset(models.Model):
                 score -= 50
             elif record.current_vibration > (record.max_vibration * 0.5):
                 score -= 20
-            
+
             # I ensure the score never drops below zero.
             record.health_score = max(0, score)
 
@@ -96,14 +97,14 @@ class IndustrialAsset(models.Model):
         """
         # 1. I allow Odoo to save the new values first to ensure consistency.
         res = super(IndustrialAsset, self).write(vals)
-        
+
         # 2. I verify the business logic AFTER the save has persisted.
         for record in self:
             if record.health_score <= 50 and record.status == 'operational':
                 record.status = 'maintenance'
                 # I automatically trigger a maintenance request to the maintenance team.
                 record._create_maintenance_request()
-        
+
         return res
 
     def _create_maintenance_request(self):
@@ -116,13 +117,13 @@ class IndustrialAsset(models.Model):
             return
 
         MaintenanceRequest = self.env['maintenance.request']
-        
+
         # 1. I check if there is arguably already an ACTIVE request for this asset description.
         # I filter by the unarchived and unfinished stages.
         existing_request = MaintenanceRequest.search([
-            ('description', 'ilike', self.serial_number), 
-            ('archive', '=', False),            
-            ('stage_id.done', '=', False)       
+            ('description', 'ilike', self.serial_number),
+            ('archive', '=', False),
+            ('stage_id.done', '=', False)
         ], limit=1)
 
         if not existing_request:
@@ -131,18 +132,18 @@ class IndustrialAsset(models.Model):
             MaintenanceRequest.create({
                 'name': force_title,
                 'request_date': fields.Date.today(),
-                'maintenance_type': 'corrective', 
-                'priority': '3',                  
+                'maintenance_type': 'corrective',
+                'priority': '3',
                 'description': f"""
                     AUTOMATED ALERT IAG SYSTEM
                     --------------------------
                     Asset: {self.name}
                     Serial: {self.serial_number}
-                    
+
                     Current Metrics:
                     - Temperature: {self.current_temperature}°C (Max: {self.max_temperature})
                     - Vibration: {self.current_vibration} mm/s (Max: {self.max_vibration})
-                    
+
                     Please inspect immediately and apply LOTO procedures.
                 """
             })
